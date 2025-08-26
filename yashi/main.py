@@ -8,17 +8,23 @@ from deep_translator import GoogleTranslator
 from openai import OpenAI
 from langdetect import detect, DetectorFactory
 import re
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# MongoDB setup
-client = MongoClient('mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects.diw08.mongodb.net/test?retryWrites=true&w=majority/')
+# MongoDB setup - use environment variable
+mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+client = MongoClient(mongo_uri)
 db = client['kuber']
 users_collection = db['users']
 
-# OpenAI setup (no hardcoded keys for security; optional)
-OPENAI_API_KEY = ""  # set via env in production if needed
+# OpenAI setup - use environment variable
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
 client_ai = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 # Session memory

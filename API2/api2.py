@@ -3,12 +3,16 @@ from flask_cors import CORS
 from pymongo import MongoClient
 import datetime
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# Connect to MongoDB with static values (as requested)
-mongo_uri = 'mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects.diw08.mongodb.net/test?retryWrites=true&w=majority'
+# Connect to MongoDB with environment variable
+mongo_uri = os.getenv('MONGO_URI', 'mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects.diw08.mongodb.net/test?retryWrites=true&w=majority')
 db_name = 'kuber'
 use_memory_fallback = False
 users_collection = None
