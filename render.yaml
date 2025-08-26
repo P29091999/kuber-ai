@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: .venv/Scripts/python main.py
+    startCommand: python main.py
     # Environment variables must be set in Render dashboard:
     # 1. Go to your service settings > Environment tab
     # 2. Add MONGO_URI: mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects.diw08.mongodb.net/test?retryWrites=true&w=majority
