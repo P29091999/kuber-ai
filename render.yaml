@@ -1,21 +1,7 @@
 services:
   - type: web
-    name: kuber-ai-api1
+    name: kuber-yashi
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT api1:app
-    envVars:
-      - key: OPENAI_API_KEY
-        sync: false
-  - type: web
-    name: kuber-ai-api2
-    env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT API2.api2:app
-  - type: web
-    name: kuber-ai-bot
-    env: static
-    buildCommand: ""
-    staticPublishPath: .
+    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT yashi.main:app
