@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Connect to MongoDB with environment variable
-mongo_uri = os.getenv('MONGO_URI', 'mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects.diw08.mongodb.net/test?retryWrites=true&w=majority')
+mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
 db_name = 'kuber'
 use_memory_fallback = False
 users_collection = None

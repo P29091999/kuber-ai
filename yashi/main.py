@@ -24,7 +24,7 @@ db = client['kuber']
 users_collection = db['users']
 
 # OpenAI setup - use environment variable
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
 client_ai = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 # Session memory
