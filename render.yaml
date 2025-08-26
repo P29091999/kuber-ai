@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: kuber-ai-api1
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 2 -b 0.0.0.0:3000 api1:app
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+  - type: web
+    name: kuber-ai-api2
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 2 -b 0.0.0.0:3001 API2.api2:app
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+staticSites:
+  - name: kuber-ai-bot
+    buildCommand: ''
+    publishPath: .
+    headers:
+      - path: /bot.html
+        name: Cache-Control
+        value: no-cache

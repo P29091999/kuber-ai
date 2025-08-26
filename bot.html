@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kuber AI Bot</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 0; background: #0b1020; color: #fff; }
+  .container { max-width: 680px; margin: 0 auto; padding: 16px; }
+  .card { background: #121833; border-radius: 12px; padding: 16px; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+  .messages { height: 60vh; overflow: auto; padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+  .msg { padding: 10px 12px; border-radius: 10px; max-width: 80%; }
+  .user { align-self: flex-end; background: #2b6cb0; }
+  .bot { align-self: flex-start; background: #1f2937; }
+  .row { display: flex; gap: 8px; margin-top: 8px; }
+  input, button { padding: 12px; border-radius: 8px; border: none; font-size: 16px; }
+  input { flex: 1; background: #0f172a; color: #fff; }
+  button { background: #22c55e; color: #03120b; font-weight: 700; }
+  .tiny { font-size: 12px; color: #94a3b8; margin-top: 12px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2 style="margin:0 0 8px">Kuber AI</h2>
+      <div id="messages" class="messages"></div>
+      <div class="row">
+        <input id="userInput" placeholder="Ask in English or Hindi..." />
+        <button id="sendBtn">Send</button>
+      </div>
+      <div class="row">
+        <input id="amount" type="number" min="1" placeholder="Amount (₹)" />
+        <button id="buyBtn">Buy Digital Gold</button>
+      </div>
+      <div class="tiny">API1: http://localhost:3000/api/query · API2: http://localhost:3001/api/purchase-gold</div>
+    </div>
+  </div>
+<script>
+const messages = document.getElementById('messages');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const amountEl = document.getElementById('amount');
+const buyBtn = document.getElementById('buyBtn');
+
+function addMsg(text, who) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function ask() {
+  const text = userInput.value.trim();
+  if (!text) return;
+  addMsg(text, 'user');
+  userInput.value = '';
+  try {
+    const res = await fetch('http://127.0.0.1:3000/api/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: 'demo-user', userQuery: text })
+    });
+    const data = await res.json();
+    const m = data.message || data.education || '...';
+    addMsg(m, 'bot');
+    if (data.redirectToPurchase) {
+      addMsg('Type Yes/No to continue with digital gold purchase.', 'bot');
+    }
+  } catch (e) {
+    addMsg('API error. Is API 1 running?', 'bot');
+  }
+}
+
+async function buy() {
+  const amount = Number(amountEl.value);
+  if (!amount || amount <= 0) { addMsg('Enter a valid amount.', 'bot'); return; }
+  try {
+    const res = await fetch('http://127.0.0.1:3001/api/purchase-gold', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: 'demo-user', amount })
+    });
+    const data = await res.json();
+    addMsg(data.message + ' Balance: ' + data.updatedGoldBalance + ' g', 'bot');
+  } catch (e) {
+    addMsg('API error. Is API 2 running?', 'bot');
+  }
+}
+
+sendBtn.onclick = ask;
+userInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });
+buyBtn.onclick = buy;
+</script>
+</body>
+</html>
