@@ -17,4 +17,4 @@ services:
   - type: static
     name: kuber-ai-bot
     buildCommand: ""
-    staticPublishPath: .
+    publishPath: .
