@@ -5,3 +5,8 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT yashi.main:app
+    # Environment variables should be set in Render dashboard
+    # Go to your service settings > Environment tab
+    # Add these variables:
+    # MONGO_URI: your-mongodb-atlas-connection-string
+    # OPENAI_API_KEY: your-openai-api-key (optional)
