@@ -12,15 +12,27 @@
 <div id="authModal" class="modal">
   <div class="modal-content auth-content">
     <span class="close">&times;</span>
+    
+    <!-- Auth Mode Toggle -->
+    <div class="auth-toggle">
+      <button id="loginToggle" class="auth-toggle-btn active">Login</button>
+      <button id="signupToggle" class="auth-toggle-btn">Sign Up</button>
+    </div>
+    
     <h2 id="authTitle">Login</h2>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
-    <input type="text" id="name" placeholder="Name (for signup)" style="display:none;">
+    <div class="password-row">
+      <input type="text" id="name" placeholder="Name (for signup)" style="display:none;">
+      <label class="show-password">
+        <input type="checkbox" id="showPassword">
+        <span>Show</span>
+      </label>
+    </div>
     <button id="authBtn">Login</button>
     <p id="toggleAuth">Don't have an account? <span id="switchAuth">Create Account</span></p>
     <p id="authError" style="color:red;"></p>
   </div>
-
 </div>
 
 <!-- DASHBOARD -->
@@ -34,8 +46,19 @@
   <!-- Chatbot -->
   <div id="chat-container">
     <div id="chat-box"></div>
-    <input type="text" id="userInput" placeholder="Type your message...">
-    <button id="sendBtn">Send</button>
+    
+    <!-- Suggestion Chips -->
+    <div id="suggestion-chips" class="suggestion-chips">
+      <button class="chip" data-action="help">💡 Help</button>
+      <button class="chip" data-action="buy-gold">💰 Buy Gold</button>
+      <button class="chip" data-action="investment-tips">📈 Investment Tips</button>
+      <button class="chip" data-action="gold-info">🪙 Gold Info</button>
+    </div>
+    
+    <div class="chat-input-container">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button id="sendBtn">Send</button>
+    </div>
   </div>
 </div>
 

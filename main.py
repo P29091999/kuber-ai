@@ -271,13 +271,23 @@ def get_user():
 # -------------------------
 @app.route('/')
 def serve_index():
-    # Serve the chat UI
-    return send_from_directory('.', 'index.html')
+    # Serve the chat UI with no-cache headers
+    response = send_from_directory('.', 'index.html')
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route('/<path:path>')
 def serve_static(path):
-    # Serve static assets like script.js and style.css
-    return send_from_directory('.', path)
+    # Serve static assets like script.js and style.css with cache control
+    response = send_from_directory('.', path)
+    if path.endswith(('.js', '.css')):
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+    return response
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    port = int(os.environ.get('PORT', 3000))
+    app.run(host='0.0.0.0', port=port, debug=False)
