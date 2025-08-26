@@ -32,10 +32,13 @@
         <input id="amount" type="number" min="1" placeholder="Amount (₹)" />
         <button id="buyBtn">Buy Digital Gold</button>
       </div>
-      <div class="tiny">API1: http://localhost:3000/api/query · API2: http://localhost:3001/api/purchase-gold</div>
+      <div class="tiny">API1: https://kuber-ai-api1.onrender.com/api/query · API2: https://kuber-ai-api2.onrender.com/api/purchase-gold</div>
     </div>
   </div>
 <script>
+const API1 = 'https://kuber-ai-api1.onrender.com/api/query';
+const API2 = 'https://kuber-ai-api2.onrender.com/api/purchase-gold';
+
 const messages = document.getElementById('messages');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
@@ -56,7 +59,7 @@ async function ask() {
   addMsg(text, 'user');
   userInput.value = '';
   try {
-    const res = await fetch('http://127.0.0.1:3000/api/query', {
+    const res = await fetch(API1, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'demo-user', userQuery: text })
@@ -68,7 +71,7 @@ async function ask() {
       addMsg('Type Yes/No to continue with digital gold purchase.', 'bot');
     }
   } catch (e) {
-    addMsg('API error. Is API 1 running?', 'bot');
+    addMsg('API error. Is API 1 live?', 'bot');
   }
 }
 
@@ -76,7 +79,7 @@ async function buy() {
   const amount = Number(amountEl.value);
   if (!amount || amount <= 0) { addMsg('Enter a valid amount.', 'bot'); return; }
   try {
-    const res = await fetch('http://127.0.0.1:3001/api/purchase-gold', {
+    const res = await fetch(API2, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: 'demo-user', amount })
@@ -84,7 +87,7 @@ async function buy() {
     const data = await res.json();
     addMsg(data.message + ' Balance: ' + data.updatedGoldBalance + ' g', 'bot');
   } catch (e) {
-    addMsg('API error. Is API 2 running?', 'bot');
+    addMsg('API error. Is API 2 live?', 'bot');
   }
 }
 
