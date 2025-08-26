@@ -17,9 +17,11 @@ client = MongoClient('mongodb+srv://abhiram:ebGBhxU5cVvDHqAo@nodeexpressprojects
 db = client['kuber']
 users_collection = db['users']
 
-# OpenAI setup
-OPENAI_API_KEY = "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"  # Replace with your key
-client_ai = OpenAI(api_key=OPENAI_API_KEY)
+# OpenAI setup (no hardcoded keys for security; optional)
+OPENAI_API_KEY = "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"  # set via env in production if needed
+# OPENAI_API_KEY = "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"  # Replace with your key
+
+client_ai = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 # Session memory
 session_memory = {}
@@ -54,6 +56,8 @@ def is_gold_investment_query(query: str) -> bool:
 
 def classify_query(query: str) -> str:
     try:
+        if not client_ai:
+            return "gold" if is_gold_investment_query(query) else "other"
         completion = client_ai.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -68,6 +72,11 @@ def classify_query(query: str) -> str:
 
 def ask_gpt(query: str, category: str, history: list) -> str:
     try:
+        if not client_ai:
+            detected_lang = detect_language(query)
+            if category == "gold" or is_gold_investment_query(query):
+                return "आप सोने में निवेश पर विचार कर रहे हैं। डिजिटल गोल्ड एक आसान और सुरक्षित विकल्प है।" if detected_lang == "hi" else "You are considering gold investment. Digital gold is an easy and safe option."
+            return "मैं आपकी मदद के लिए यहाँ हूँ।" if detected_lang == "hi" else "I am here to help."
         detected_lang = detect_language(query)
         system_prompt = f"""
 You are Kuber AI, a friendly financial assistant for digital gold investments.
