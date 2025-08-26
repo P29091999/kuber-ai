@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 2 -b 0.0.0.0:3000 api1:app
+    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT api1:app
     envVars:
       - key: OPENAI_API_KEY
         sync: false
@@ -13,15 +13,8 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 2 -b 0.0.0.0:3001 API2.api2:app
-    envVars:
-      - key: MONGODB_URI
-        sync: false
-staticSites:
-  - name: kuber-ai-bot
-    buildCommand: ''
-    publishPath: .
-    headers:
-      - path: /bot.html
-        name: Cache-Control
-        value: no-cache
+    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT API2.api2:app
+  - type: static
+    name: kuber-ai-bot
+    buildCommand: ""
+    staticPublishPath: .
